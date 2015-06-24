@@ -34,15 +34,16 @@ DWORD FASTCALL IRQH_DefaultVector(BYTE irq)
 // -----------------------------------------------------------------------
 void IRQH_IRQCallBack(BYTE irq)
 {
+#if 0
 	int i;
 	IRQH_IRQ[irq] = 0;
-	C68k_Set_IRQ(&C68K, 0, 0);
+	C68k_Set_IRQ(&C68K, 0);
 	for (i=7; i>0; i--)
 	{
 		if (IRQH_IRQ[i])
 		{
 			C68k_Set_IRQ_Callback(&C68K, IRQH_CallBack[i]);
-			C68k_Set_IRQ(&C68K, i, HOLD_LINE); // xxx 
+			C68k_Set_IRQ(&C68K, i); // xxx 
 			if ( C68K.ICount) {					// 多重割り込み時（CARAT）
 				m68000_ICountBk += C68K.ICount;		// 強制的に割り込みチェックをさせる
 				C68K.ICount = 0;				// 苦肉の策 ^^;
@@ -50,6 +51,7 @@ void IRQH_IRQCallBack(BYTE irq)
 			break;
 		}
 	}
+#endif
 }
 
 
@@ -58,7 +60,8 @@ void IRQH_IRQCallBack(BYTE irq)
 // -----------------------------------------------------------------------
 void IRQH_Int(BYTE irq, void* handler)
 {
-	int i;
+#if 0
+    int i;
 	IRQH_IRQ[irq] = 1;
 	if (handler==NULL)
 		IRQH_CallBack[irq] = &IRQH_DefaultVector;
@@ -77,4 +80,5 @@ void IRQH_Int(BYTE irq, void* handler)
 			return;
 		}
 	}
+#endif
 }

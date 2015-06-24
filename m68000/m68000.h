@@ -9,7 +9,7 @@
 #ifndef M68000_H
 #define M68000_H
 
-#include "c68k.h"
+#include "c68k/c68k.h"
 
 // MAME互換のレジスタ番号 (一部未対応)
 enum

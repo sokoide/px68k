@@ -490,7 +490,8 @@ rm_buserr(DWORD addr)
 void Memory_Init(void)
 {
 
-	cpu_setOPbase24((DWORD)C68k_Get_Reg(&C68K, C68K_PC));
+//        cpu_setOPbase24((DWORD)C68k_Get_Reg(&C68K, C68K_PC));
+    cpu_setOPbase24((DWORD)C68k_Get_PC(&C68K));
 }
 
 void FASTCALL
