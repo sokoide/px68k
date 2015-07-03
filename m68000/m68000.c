@@ -68,10 +68,11 @@ static UINT16 m68000_read_pcrelative_16(UINT32 offset)
 /*--------------------------------------------------------
 	CPU½é´ü²½
 --------------------------------------------------------*/
+s32 my_irqh_callback(s32 level);
 
 void m68000_init(void)
 {
-    C68k_Init(&C68K, NULL); //Todo
+    C68k_Init(&C68K, my_irqh_callback);
 #if 0
     C68k_Set_ReadB(&C68K, Memory_ReadB);
     C68k_Set_ReadW(&C68K, Memory_ReadW);

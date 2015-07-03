@@ -421,7 +421,7 @@ void WinX68k_Exec(void)
 				oldpc = C68k_Get_Reg(&C68K, C68K_PC);
 //				C68K.ICount = 1;
 //				C68k_Exec(&C68K, C68K.ICount);
-				C68k_Exec(&C68K, 0);
+				C68k_Exec(&C68K, 1);
 			}
 			fclose(fp);
 			usedclk = clk_line = HSYNC_CLK;

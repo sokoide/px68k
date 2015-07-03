@@ -52,6 +52,7 @@ void IRQH_IRQCallBack(BYTE irq)
 		}
 	}
 #endif
+	IRQH_IRQ[irq&7] = 0;
 }
 
 
@@ -81,4 +82,50 @@ void IRQH_Int(BYTE irq, void* handler)
 		}
 	}
 #endif
+#if 0
+	int i;
+	IRQH_IRQ[irq&7] = 1;
+	if (handler==NULL)
+	    IRQH_CallBack[irq&7] = &IRQH_DefaultVector;
+	else
+	    IRQH_CallBack[irq&7] = handler;
+	for (i=7; i>0; i--)
+	{
+	    if (IRQH_IRQ[i])
+	    {
+		C68k_Set_IRQ(&C68K, i);
+		return;
+	    }
+	}
+#endif
+	int i;
+	IRQH_IRQ[irq&7] = 1;
+	if (handler==NULL)
+	    IRQH_CallBack[irq&7] = &IRQH_DefaultVector;
+	else
+	    IRQH_CallBack[irq&7] = handler;
+	C68k_Set_IRQ(&C68K, irq&7);
+}
+
+s32 my_irqh_callback(s32 level)
+{
+#if 0
+    int i;
+    int vect = -1;
+    for (i=7; i>0; i--)
+    {
+	if (IRQH_IRQ[i])
+	{
+	    IRQH_IRQ[level&7] = 0;
+	    C68K_INT_CALLBACK *func = IRQH_CallBack[i];
+	    vect = (func)(level&7);
+	    break;
+	}
+    }
+#endif
+
+    C68K_INT_CALLBACK *func = IRQH_CallBack[level&7];
+    int vect = (func)(level&7);
+//    printf("irq vect = %x line = %d\n", vect, level);
+    return (s32)vect;
 }
