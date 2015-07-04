@@ -256,6 +256,7 @@ fclose(fp);
 	else if ( adr>=0xecc100 )
 	{				// Bus Error?
 		BusErrFlag = 1;
+		printf("func = %s addr = %x flag = %d\n", __func__, adr, BusErrFlag);
 	}
 	return ret;
 }
