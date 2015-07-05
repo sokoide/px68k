@@ -82,7 +82,7 @@ void IRQH_Int(BYTE irq, void* handler)
 		}
 	}
 #endif
-#if 0
+#if 1
 	int i;
 	IRQH_IRQ[irq&7] = 1;
 	if (handler==NULL)
@@ -98,6 +98,7 @@ void IRQH_Int(BYTE irq, void* handler)
 	    }
 	}
 #endif
+#if 0
 	int i;
 	IRQH_IRQ[irq&7] = 1;
 	if (handler==NULL)
@@ -105,6 +106,7 @@ void IRQH_Int(BYTE irq, void* handler)
 	else
 	    IRQH_CallBack[irq&7] = handler;
 	C68k_Set_IRQ(&C68K, irq&7);
+#endif
 }
 
 s32 my_irqh_callback(s32 level)
@@ -124,8 +126,19 @@ s32 my_irqh_callback(s32 level)
     }
 #endif
 
+    int i;
     C68K_INT_CALLBACK *func = IRQH_CallBack[level&7];
     int vect = (func)(level&7);
-//    printf("irq vect = %x line = %d\n", vect, level);
+    printf("irq vect = %x line = %d\n", vect, level);
+
+    for (i=7; i>0; i--)
+    {
+	if (IRQH_IRQ[i])
+	{
+	    C68k_Set_IRQ(&C68K, i);
+	    break;
+	}
+    }
+
     return (s32)vect;
 }
