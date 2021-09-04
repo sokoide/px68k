@@ -405,7 +405,7 @@ void WinX68k_Exec(void) {
                 // if
                 //(regs.pc<0x10000) tracing=1; 				if (
                 //(regs.pc&1) )
-                //fp=fopen("_trace68.txt",
+                // fp=fopen("_trace68.txt",
                 //"a"); 				if ( (regs.pc==0x7176)
                 ///*&& (Memory_ReadW(oldpc)==0xff1a)*/ ) tracing=100;
                 // if (
@@ -900,7 +900,7 @@ int main(int argc, char* argv[])
                     break;
                 }
 #endif
-                printf("keydown: 0x%x\n", ev.key.keysym.sym);
+                printf("keydown: 0x%x,", ev.key.keysym.sym);
                 printf("font %d %d\n", FONT[100], FONT[101]);
                 if (ev.key.keysym.sym == SDLK_F12) {
                     if (menu_mode == menu_out) {
@@ -910,6 +910,10 @@ int main(int argc, char* argv[])
                         DSound_Play();
                         menu_mode = menu_out;
                     }
+                } else if (ev.key.keysym.sym == SDLK_LGUI) {
+                    // left Command (Apple) or Windows key
+                    Config.NoWaitMode = !Config.NoWaitMode;
+                    p6logd("* nowait: %d\n", Config.NoWaitMode);
                 }
 #ifdef WIN68DEBUG
                 if (ev.key.keysym.sym == SDLK_F10) {
