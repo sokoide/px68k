@@ -6,7 +6,7 @@
 
 ## Setup
 
-* Please refer to the [Original Document]>(./doc/kero_src.txt)
+* Please refer to the [Original Document](./doc/kero_src.txt)
 
 ## Keyboard Mapping
 
