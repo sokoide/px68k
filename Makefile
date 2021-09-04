@@ -1,7 +1,8 @@
 include version.txt
+SDL2=1
 
-CC	 = gcc
-CXX	 = c++
+CC	 = clang
+CXX	 = clang++
 CXXLINK	 = $(CXX)
 RM	 = rm -f
 TAGS	 = etags
@@ -72,12 +73,12 @@ endif
 
 ifeq ($(shell uname -m),armv6l)
 MOPT=
-else
-ifeq ($(shell uname -m),x86_64)
+else ifeq ($(shell uname -m),x86_64)
+MOPT=
+else ifeq ($(shell uname -m),arm64)
 MOPT=
 else
 MOPT= -m32
-endif
 endif
 
 LDLIBS = -lm
@@ -135,4 +136,3 @@ clean::
 
 tags::
 	find . -name "*.h" -o -name "*.c" -o -name "*.cpp" | $(TAGS) -
-
