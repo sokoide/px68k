@@ -1,3 +1,5 @@
+#include "argparser.hpp"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -205,7 +207,7 @@ int WinX68k_LoadROMs(void) {
         if (fp == 0) {
 #if 1
             // フォント生成 XXX
-            printf("フォントROMイメージが見つかりません\n");
+            Error("フォントROMイメージが見つかりません\n");
             return FALSE;
 #else
             MessageBox(hWndMain,
@@ -590,6 +592,20 @@ extern "C" int SDL_main(int argc, char* argv[])
 int main(int argc, char* argv[])
 #endif
 {
+    // parse command line args
+    ap::parser p(argc, argv);
+    p.add("-v", "--verbose", "Verbose output", ap::mode::BOOLEAN);
+    p.add("-0", "--fd0", "FD0 image path");
+    p.add("-1", "--fd1", "FD1 image path");
+    auto args = p.parse();
+
+    if (!args.parsed_successfully()) {
+        Error("Failed to parse arguments");
+        return 1;
+    }
+
+    VerboseOutput = std::stoi(args["-v"]);
+
 #ifndef PSP
     SDL_Event ev;
     SDL_Keycode menu_key_down;
@@ -633,6 +649,16 @@ int main(int argc, char* argv[])
     puts(winx68k_dir);
 
     LoadConfig();
+
+    // Set FDs
+    if (!args["-0"].empty()) {
+        printf("fd0: %s\n", args["-0"].c_str());
+        strncpy(Config.FDDImage[0], args["-0"].c_str(), MAX_PATH - 1);
+    }
+    if (!args["-1"].empty()) {
+        printf("fd1: %s\n", args["-1"].c_str());
+        strncpy(Config.FDDImage[1], args["-1"].c_str(), MAX_PATH - 1);
+    }
 
 #ifndef NOSOUND
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
@@ -784,15 +810,6 @@ int main(int argc, char* argv[])
 #endif
     DSound_Play();
 
-    // command line から指定した場合
-    switch (argc) {
-    case 3:
-        strcpy(Config.FDDImage[1], argv[2]);
-    case 2:
-        strcpy(Config.FDDImage[0], argv[1]);
-        break;
-    }
-
     FDD_SetFD(0, Config.FDDImage[0], 0);
     FDD_SetFD(1, Config.FDDImage[1], 0);
 
@@ -900,8 +917,8 @@ int main(int argc, char* argv[])
                     break;
                 }
 #endif
-                printf("keydown: 0x%x,", ev.key.keysym.sym);
-                printf("font %d %d\n", FONT[100], FONT[101]);
+                p6logd("keydown: 0x%x,", ev.key.keysym.sym);
+                p6logd("font %d %d\n", FONT[100], FONT[101]);
                 if (ev.key.keysym.sym == SDLK_F12) {
                     if (menu_mode == menu_out) {
                         menu_mode = menu_enter;
@@ -918,7 +935,7 @@ int main(int argc, char* argv[])
 #ifdef WIN68DEBUG
                 if (ev.key.keysym.sym == SDLK_F10) {
                     traceflag ^= 1;
-                    printf("trace %s\n", (traceflag) ? "on" : "off");
+                    p6logd("trace %s\n", (traceflag) ? "on" : "off");
                 }
 #endif
                 if (menu_mode != menu_out) {
@@ -928,7 +945,7 @@ int main(int argc, char* argv[])
                 }
                 break;
             case SDL_KEYUP:
-                printf("keyup: 0x%x\n", ev.key.keysym.sym);
+                p6logd("keyup: 0x%x\n", ev.key.keysym.sym);
                 Keyboard_KeyUp(ev.key.keysym.sym);
                 break;
             }

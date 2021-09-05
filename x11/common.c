@@ -12,6 +12,7 @@
 
 //extern HWND hWndMain;
 extern const char PrgTitle[];
+int VerboseOutput = 0;
 
 // P6L: PX68K_LOG
 //      ~ ~   ~
@@ -30,6 +31,7 @@ void Error(const char* s)
 // log for debug
 void p6logd(const char *fmt, ...)
 {
+	if (!VerboseOutput) return;
 	va_list args;
 
 	va_start(args, fmt);

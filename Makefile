@@ -35,10 +35,10 @@ CDEBUGFLAGS+= -DNO_MERCURY
 #
 # for Opt.
 #
-# CDEBUGFLAGS= -O3
-# CDEBUGFLAGS+= -funroll-loops
-# CDEBUGFLAGS+= -fomit-frame-pointer
-# CDEBUGFLAGS+= -ffast-math
+CDEBUGFLAGS= -O3
+CDEBUGFLAGS+= -funroll-loops
+CDEBUGFLAGS+= -fomit-frame-pointer
+CDEBUGFLAGS+= -ffast-math
 
 # CDEBUGFLAGS+= -march=pentium-m
 # CDEBUGFLAGS+= -msse -mfpmath=sse
@@ -88,7 +88,7 @@ EXTRA_INCLUDES= -I./x11 -I./x68k -I./fmgen -I./win32api $(SDL_INCLUDE)
 CXXDEBUGFLAGS= $(CDEBUGFLAGS)
 
 CFLAGS= $(MOPT) $(CDEBUGFLAGS) $(EXTRA_INCLUDES)
-CXXFLAGS= $(MOPT) $(CXXDEBUGFLAGS) $(EXTRA_INCLUDES)
+CXXFLAGS= $(MOPT) $(CXXDEBUGFLAGS) $(EXTRA_INCLUDES) -std=c++17 -stdlib=libc++
 CXXLDOPTIONS= $(CXXDEBUGFLAGS)
 
 CPUOBJS= x68k/d68k.o m68000/m68000.o
