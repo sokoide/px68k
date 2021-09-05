@@ -48,7 +48,7 @@ dd bs=4096 count=10240 if=/dev/zero of=hdd0.hdf
 ```
 
 * Edit `$HOME/.keropi/config` and add HDD0=hdd0.hdf
-* Run Human69k and run `switch` to edit the max HDD to 1 (or more)
+* Run Human68k and run `switch` to edit the max HDD to 1 (or more)
 * Run Human68k and run `format` to initialize it (quick) and allocate space (takes a few mins)
 * After booting from the SASI HDD (`A` drive), copy Human68k system from fdd0 (`B` drive) by `copyall b:\bin\copyall b:\*.* a:`
 
@@ -63,7 +63,7 @@ dd bs=4096 count=10240 if=/dev/zero of=hdd0.hdf
   * F13/PrintScrieen ... 'ろ' key on X68000. If you press SHIFT + F13, it'll input `_` (underscore)
   * F14 ... Roman key to input half width Katakana
   * F15 ... Opt.1 key to boot from Floppy Drive 0 even if the default is HDD0 or SCSI0
-  * Left Command (Apple) / Windows (Win) ... toggle no-wait (same as F12 menu's one)
+  * Left Option (Apple) / Alt (Win) ... toggle no-wait (same as F12 menu's one)
 
 ## TODO
 

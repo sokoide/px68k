@@ -35,10 +35,10 @@ CDEBUGFLAGS+= -DNO_MERCURY
 #
 # for Opt.
 #
-CDEBUGFLAGS= -O3
-CDEBUGFLAGS+= -funroll-loops
-CDEBUGFLAGS+= -fomit-frame-pointer
-CDEBUGFLAGS+= -ffast-math
+# CDEBUGFLAGS= -O3
+# CDEBUGFLAGS+= -funroll-loops
+# CDEBUGFLAGS+= -fomit-frame-pointer
+# CDEBUGFLAGS+= -ffast-math
 
 # CDEBUGFLAGS+= -march=pentium-m
 # CDEBUGFLAGS+= -msse -mfpmath=sse

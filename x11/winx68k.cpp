@@ -597,6 +597,7 @@ int main(int argc, char* argv[])
     p.add("-v", "--verbose", "Verbose output", ap::mode::BOOLEAN);
     p.add("-0", "--fd0", "FD0 image path");
     p.add("-1", "--fd1", "FD1 image path");
+    p.add("-f", "--fullscreen", "Run in fullscreen mode", ap::mode::BOOLEAN);
     auto args = p.parse();
 
     if (!args.parsed_successfully()) {
@@ -715,6 +716,10 @@ int main(int argc, char* argv[])
         p6logd("sdl_window: %ld", sdl_window);
     }
     SDL_SetWindowSize(sdl_window, 768, 512);
+
+    if (std::stoi(args["-f"])) {
+        SDL_SetWindowFullscreen(sdl_window, SDL_WINDOW_FULLSCREEN);
+    }
 
 #ifdef USE_OGLES11
     SDL_GLContext glcontext = SDL_GL_CreateContext(sdl_window);
@@ -846,9 +851,18 @@ int main(int argc, char* argv[])
             switch (ev.type) {
             case SDL_QUIT:
                 goto end_loop;
+            case SDL_MOUSEBUTTONDOWN:
+                p6logd("mouse down: x:%d y:%d button:%d clicks:%d\n",
+                       ev.button.x, ev.button.y, ev.button.button,
+                       ev.button.clicks);
+                break;
+            case SDL_MOUSEBUTTONUP:
+                p6logd("mouse up: x:%d y:%d button:%d clicks:%d\n", ev.button.x,
+                       ev.button.y, ev.button.button, ev.button.clicks);
+                break;
             case SDL_MOUSEMOTION:
-                p6logd("x:%d y:%d xrel:%d yrel:%d\n", ev.motion.x, ev.motion.y,
-                       ev.motion.xrel, ev.motion.yrel);
+                p6logd("mouse motion: x:%d y:%d xrel:%d yrel:%d\n", ev.motion.x,
+                       ev.motion.y, ev.motion.xrel, ev.motion.yrel);
                 break;
 #if defined(ANDROID) || TARGET_OS_IPHONE
             case SDL_APP_WILLENTERBACKGROUND:
@@ -917,8 +931,8 @@ int main(int argc, char* argv[])
                     break;
                 }
 #endif
-                p6logd("keydown: 0x%x,", ev.key.keysym.sym);
-                p6logd("font %d %d\n", FONT[100], FONT[101]);
+                p6logd("keydown: 0x%x, font: %d %d\n", ev.key.keysym.sym,
+                       FONT[100], FONT[101]);
                 if (ev.key.keysym.sym == SDLK_F12) {
                     if (menu_mode == menu_out) {
                         menu_mode = menu_enter;
@@ -927,8 +941,8 @@ int main(int argc, char* argv[])
                         DSound_Play();
                         menu_mode = menu_out;
                     }
-                } else if (ev.key.keysym.sym == SDLK_LGUI) {
-                    // left Command (Apple) or Windows key
+                } else if (ev.key.keysym.sym == SDLK_LALT) {
+                    // left Option (Apple) or Alt key
                     Config.NoWaitMode = !Config.NoWaitMode;
                     p6logd("* nowait: %d\n", Config.NoWaitMode);
                 }

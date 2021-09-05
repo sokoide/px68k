@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2003,2008 NONAKA Kimihiro
  * All rights reserved.
  *
@@ -59,7 +59,7 @@ void Mouse_Init(void)
 // ----------------------------------
 void Mouse_Event(int param, float dx, float dy)
 {
-	printf("ME(): %f %f\n", dx, dy);
+	p6logd("Mouse_Event(%d, %f,%f)\n", param, dx, dy);
 
 	if (MouseSW) {
 		switch (param) {
@@ -169,7 +169,7 @@ getmaincenter(GtkWidget *w, POINT *p)
 
 void
 gdk_window_set_pointer(GdkWindow *window, gint x, gint y)
-{ 
+{
 	GdkWindowPrivate *private;
 
 	if (!window)
