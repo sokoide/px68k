@@ -65,7 +65,10 @@ dd bs=4096 count=10240 if=/dev/zero of=hdd0.hdf
   * F15 ... Opt.1 key to boot from Floppy Drive 0 even if the default is HDD0 or SCSI0
   * Left Option (Apple) / Alt (Win) ... toggle no-wait (same as F12 menu's one)
 
+## Limitation
+
+* Mouse support it limited. SX-Window's mouse cursor doesn't automatically synchronize with the host OS
+
 ## TODO
 
-* Mouse input is not yet implemented
 * WinDRV to send/receive files between the emulator and Mac

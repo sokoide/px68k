@@ -855,14 +855,23 @@ int main(int argc, char* argv[])
                 p6logd("mouse down: x:%d y:%d button:%d clicks:%d\n",
                        ev.button.x, ev.button.y, ev.button.button,
                        ev.button.clicks);
+                if (ev.button.button == 1)
+                    Mouse_Event(1, 1, 0);
+                else if (ev.button.button == 3)
+                    Mouse_Event(2, 1, 0);
                 break;
             case SDL_MOUSEBUTTONUP:
                 p6logd("mouse up: x:%d y:%d button:%d clicks:%d\n", ev.button.x,
                        ev.button.y, ev.button.button, ev.button.clicks);
+                if (ev.button.button == 1)
+                    Mouse_Event(1, 0, 0);
+                else if (ev.button.button == 3)
+                    Mouse_Event(2, 0, 0);
                 break;
             case SDL_MOUSEMOTION:
                 p6logd("mouse motion: x:%d y:%d xrel:%d yrel:%d\n", ev.motion.x,
                        ev.motion.y, ev.motion.xrel, ev.motion.yrel);
+                Mouse_Event(0, ev.motion.xrel, ev.motion.yrel);
                 break;
 #if defined(ANDROID) || TARGET_OS_IPHONE
             case SDL_APP_WILLENTERBACKGROUND:
