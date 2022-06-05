@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2003,2008 NONAKA Kimihiro
  * All rights reserved.
  *
@@ -145,7 +145,7 @@ struct _menu_func {
 };
 
 struct _menu_func menu_func[] = {
-	{menu_system, 0}, 
+	{menu_system, 0},
 	{menu_joy_or_mouse, 1},
 	{menu_create_flist, 0},
 	{menu_create_flist, 0},
@@ -466,6 +466,7 @@ static void menu_frame_skip(int v)
 	} else {
 		Config.FrameRate = v;
 	}
+	Config.FrameRatePrev = Config.FrameRate;
 }
 
 static void menu_sound_rate(int v)
@@ -714,7 +715,7 @@ int WinUI_Menu(int first)
 			drv = WinUI_get_drv_num(mkey_y);
 			printf("***** drv:%d *****\n", drv);
 			if (drv < 0) {
-				break; 
+				break;
 			}
 			y = mfl.ptr + mfl.y;
 			p6logd("file slect %s\n", mfl.name[y]);

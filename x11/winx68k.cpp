@@ -953,6 +953,12 @@ int main(int argc, char* argv[])
                 } else if (ev.key.keysym.sym == SDLK_LALT) {
                     // left Option (Apple) or Alt key
                     Config.NoWaitMode = !Config.NoWaitMode;
+                    if (Config.NoWaitMode) {
+                        Config.FrameRatePrev = Config.FrameRate;
+                        Config.FrameRate = 32;
+                    } else {
+                        Config.FrameRatePrev = Config.FrameRate;
+                    }
                     p6logd("* nowait: %d\n", Config.NoWaitMode);
                 }
 #ifdef WIN68DEBUG
