@@ -667,8 +667,11 @@ void FASTCALL WinDraw_Draw(void) {
     }
 
     if (TextDotX <= 512) {
+        // roto_surface =
+        //     rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 512.0 * 1.33333 / TextDotX,
+        //                       512.0 / TextDotY, 0);
         roto_surface =
-            rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 512.0 * 1.33333 / TextDotX,
+            rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 768.0 / TextDotX,
                               512.0 / TextDotY, 0);
     }
     if (roto_surface) {
