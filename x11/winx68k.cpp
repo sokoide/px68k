@@ -598,6 +598,7 @@ int main(int argc, char* argv[])
     p.add("-0", "--fd0", "FD0 image path");
     p.add("-1", "--fd1", "FD1 image path");
     p.add("-f", "--fullscreen", "Run in fullscreen mode", ap::mode::BOOLEAN);
+    p.add("-s", "--scale", "Window scale factor (e.g. 1.5). Default 1.0.");
     auto args = p.parse();
 
     if (!args.parsed_successfully()) {
@@ -650,6 +651,12 @@ int main(int argc, char* argv[])
     puts(winx68k_dir);
 
     LoadConfig();
+
+    // Set Scale
+    if (!args["-s"].empty()) {
+        Config.Scale = std::stod(args["-s"]);
+    }
+    printf("*** scale: %f\n", Config.Scale);
 
     // Set FDs
     if (!args["-0"].empty()) {
@@ -715,7 +722,8 @@ int main(int argc, char* argv[])
     if (sdl_window == NULL) {
         p6logd("sdl_window: %ld", sdl_window);
     }
-    SDL_SetWindowSize(sdl_window, 768, 512);
+    SDL_SetWindowSize(sdl_window, SCREEN_WIDTH * Config.Scale,
+                      SCREEN_HEIGHT * Config.Scale);
 
     if (std::stoi(args["-f"])) {
         SDL_SetWindowFullscreen(sdl_window, SDL_WINDOW_FULLSCREEN);

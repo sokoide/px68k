@@ -274,8 +274,8 @@ stretch(gpointer data, guint action, GtkWidget *w)
 	UNUSED(data);
 	UNUSED(w);
 
-	if (Config.WinStrech != (int)action)
-		Config.WinStrech = action;
+	if (Config.WinStretch != (int)action)
+		Config.WinStretch = action;
 }
 
 static void

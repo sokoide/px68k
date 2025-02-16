@@ -225,6 +225,12 @@ void LoadConfig(void)
 	char	buf[CFGLEN];
 	FILEH fp;
 
+	GetPrivateProfileString(ini_title, "Scale", "", buf, CFGLEN, winx68k_ini);
+	if (buf[0] != 0)
+		Config.Scale = atof(buf);
+	else
+		Config.Scale = 1.0;
+
 	winx = GetPrivateProfileInt(ini_title, "WinPosX", 0, winx68k_ini);
 	winy = GetPrivateProfileInt(ini_title, "WinPosY", 0, winx68k_ini);
 
@@ -287,7 +293,7 @@ void LoadConfig(void)
 	GetPrivateProfileString(ini_title, "WinDrvFDD", "1", buf, CFGLEN, winx68k_ini);
 	Config.WinDrvFD = solveBOOL(buf);
 
-	Config.WinStrech = GetPrivateProfileInt(ini_title, "WinStretch", 1, winx68k_ini);
+	Config.WinStretch = GetPrivateProfileInt(ini_title, "WinStretch", 1, winx68k_ini);
 
 	GetPrivateProfileString(ini_title, "DSMixing", "0", buf, CFGLEN, winx68k_ini);
 	Config.DSMixing = solveBOOL(buf);
@@ -416,7 +422,7 @@ void SaveConfig(void)
 	WritePrivateProfileString(ini_title, "WinDrvLFN", makeBOOL((BYTE)Config.LongFileName), winx68k_ini);
 	WritePrivateProfileString(ini_title, "WinDrvFDD", makeBOOL((BYTE)Config.WinDrvFD), winx68k_ini);
 
-	wsprintf(buf, "%d", Config.WinStrech);
+	wsprintf(buf, "%d", Config.WinStretch);
 	WritePrivateProfileString(ini_title, "WinStretch", buf, winx68k_ini);
 
 	WritePrivateProfileString(ini_title, "DSMixing", makeBOOL((BYTE)Config.DSMixing), winx68k_ini);

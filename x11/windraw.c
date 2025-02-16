@@ -129,7 +129,7 @@ void WinDraw_ChangeSize(void) {
 
     Mouse_ChangePos();
 
-    switch (Config.WinStrech) {
+    switch (Config.WinStretch) {
     case 0:
         WindowX = TextDotX;
         WindowY = TextDotY;
@@ -666,21 +666,18 @@ void FASTCALL WinDraw_Draw(void) {
         return;
     }
 
-    if (TextDotX <= 512) {
-        // roto_surface =
-        //     rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 512.0 * 1.33333 / TextDotX,
-        //                       512.0 / TextDotY, 0);
-        roto_surface =
-            rotozoomSurfaceXY(sdl_rgbsurface, 0.0, WindowX / TextDotX,
-                              WindowY / TextDotY, 0);
+    roto_surface =
+        rotozoomSurfaceXY(sdl_rgbsurface, 0.0, WindowX * Config.Scale / TextDotX,
+                            WindowY * Config.Scale / TextDotY, 0);
+
+    if (roto_surface == NULL) {
+        puts("rotozoomSurfaceXY() failed");
+        return;
     }
 
-    if (roto_surface) {
-        ret = SDL_BlitSurface(roto_surface, NULL, sdl_surface, NULL);
-        SDL_FreeSurface(roto_surface);
-    } else {
-        ret = SDL_BlitSurface(sdl_rgbsurface, NULL, sdl_surface, NULL);
-    }
+    ret = SDL_BlitSurface(roto_surface, NULL, sdl_surface, NULL);
+    SDL_FreeSurface(roto_surface);
+
     if (ret < 0) {
         printf("SDL_BlitSurface() failed %d\n", ret);
     }

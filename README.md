@@ -21,14 +21,15 @@ brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer sdl2_gfx sdl2_net
 * Run `px68k -h` to show command line arguments
 
 ```sh
-$ ./px68k -h
-Usage: ./px68k [-h,--help] [-v,--verbose] [-0,--fd0] [-1,--fd1]
+Usage: ./px68k [-h,--help] [-v,--verbose] [-0,--fd0] [-1,--fd1] [-f,--fullscreen] [-s,--scale]
 
 Arguments:
-    -h, --help       Show this help message and exit
-    -v, --verbose    Verbose output
-    -0, --fd0        FD0 image path
-    -1, --fd1        FD1 image path
+    -h, --help          Show this help message and exit
+    -v, --verbose       Verbose output
+    -0, --fd0           FD0 image path
+    -1, --fd1           FD1 image path
+    -f, --fullscreen    Run in fullscreen mode
+    -s, --scale         Window scale factor (e.g. 1.5). Default 1.0.
 ```
 
 * Then run like this
