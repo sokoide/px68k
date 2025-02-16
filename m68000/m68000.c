@@ -79,10 +79,10 @@ void m68000_init(void)
     C68k_Set_WriteB(&C68K, Memory_WriteB);
     C68k_Set_WriteW(&C68K, Memory_WriteW);
 #else
-    C68k_Set_ReadB(&C68K, Memory_ReadB);
-    C68k_Set_ReadW(&C68K, Memory_ReadW);
-    C68k_Set_WriteB(&C68K, Memory_WriteB);
-    C68k_Set_WriteW(&C68K, Memory_WriteW);
+    C68k_Set_ReadB(&C68K, (C68K_READ*)Memory_ReadB);
+    C68k_Set_ReadW(&C68K, (C68K_READ*)Memory_ReadW);
+    C68k_Set_WriteB(&C68K, (C68K_WRITE*)Memory_WriteB);
+    C68k_Set_WriteW(&C68K, (C68K_WRITE*)Memory_WriteW);
 #endif
         C68k_Set_Fetch(&C68K, 0x000000, 0xbfffff, (pointer)MEM);
         C68k_Set_Fetch(&C68K, 0xc00000, 0xc7ffff, (pointer)GVRAM);

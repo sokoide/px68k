@@ -4,14 +4,15 @@ SDL2=1
 CC	 = clang
 CXX	 = clang++
 CXXLINK	 = $(CXX)
+
+# Enable DEBUG=1 for debug builf
+# DEBUG = 1
 RM	 = rm -f
 TAGS	 = etags
 DEPEND	 = gccmakedep
 DEPEND_DEFINES =
 
-# for debug
-CDEBUGFLAGS = -g -O0 -fno-strict-aliasing
-
+CDEBUGFLAGS= -fno-strict-aliasing
 #
 # enable SDL_gfx
 #
@@ -32,16 +33,22 @@ CDEBUGFLAGS+= -DNO_MERCURY
 #
 #CDEBUGFLAGS+= -DRFMDRV
 
+ifdef DEBUG
+# for debug
+CDEBUGFLAGS += -g -O0
+
+else
 #
 # for Opt.
 #
-# CDEBUGFLAGS= -O3
-# CDEBUGFLAGS+= -funroll-loops
-# CDEBUGFLAGS+= -fomit-frame-pointer
-# CDEBUGFLAGS+= -ffast-math
+CDEBUGFLAGS+= -O3
+CDEBUGFLAGS+= -funroll-loops
+CDEBUGFLAGS+= -fomit-frame-pointer
+CDEBUGFLAGS+= -ffast-math
 
 # CDEBUGFLAGS+= -march=pentium-m
 # CDEBUGFLAGS+= -msse -mfpmath=sse
+endif
 
 #
 # for DEBUG

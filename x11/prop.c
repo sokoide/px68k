@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2003 NONAKA Kimihiro
  * All rights reserved.
  *
@@ -233,6 +233,7 @@ void LoadConfig(void)
 #else
 	Config.FrameRate = (BYTE)GetPrivateProfileInt(ini_title, "FrameRate", 7, winx68k_ini);
 #endif
+
 	if (!Config.FrameRate) Config.FrameRate = 7;
 	GetPrivateProfileString(ini_title, "StartDir", "", buf, MAX_PATH, winx68k_ini);
 	if (buf[0] != 0)
@@ -783,7 +784,7 @@ create_sound_note(void)
 static void
 sample_rate_button_clicked(GtkButton *b, gpointer d)
 {
-	
+
 	UNUSED(b);
 
 	ConfigProp.SampleRate = (DWORD)((long)d);

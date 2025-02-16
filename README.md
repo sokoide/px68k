@@ -8,6 +8,12 @@
 ## Setup
 
 * Please refer to the [Original Document](./doc/kero_src.txt)
+* If not installed, install SDL2
+
+```bash
+brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer sdl2_gfx sdl2_net
+```
+
 * Necessary ROMs which Sharp made available for free are mirrored [here](http://retropc.net/x68000/software/sharp/)
 
 ## How to run
@@ -72,3 +78,8 @@ dd bs=4096 count=10240 if=/dev/zero of=hdd0.hdf
 ## TODO
 
 * WinDRV to send/receive files between the emulator and Mac
+
+## FAQ
+
+* FrameRate is low
+  * Set `FrameRate=7` (auto frame skip) in  `$HOME/.keropi/config`

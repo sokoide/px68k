@@ -53,13 +53,13 @@ extern "C" {
 int rfd_sock;
 #endif
 
-//#define WIN68DEBUG
+// #define WIN68DEBUG
 
 #ifdef WIN68DEBUG
 #include "d68k.h"
 #endif
 
-//#include "../icons/keropi_mono.xbm"
+// #include "../icons/keropi_mono.xbm"
 
 #define APPNAME "Keropi"
 
@@ -117,7 +117,7 @@ void WinX68k_SCSICheck(void) {
         0x00, 0x00, 0x00, 0x00, // $fc0008 ?
         0x48, 0x75, 0x6d, 0x61, // $fc000c ↓
         0x6e, 0x36, 0x38,
-        0x6b, // $fc0010 ID "Human68k"	(必ず起動エントリポイントの直前)
+        0x6b,       // $fc0010 ID "Human68k"	(必ず起動エントリポイントの直前)
         0x4e, 0x75, // $fc0014 "rts"		(起動エントリポイント)
         0x23, 0xfc, 0x00, 0xfc, 0x00,
         0x2a, // $fc0016 ↓		(IOCSベクタ設定エントリポイント)
@@ -130,8 +130,8 @@ void WinX68k_SCSICheck(void) {
         // よって、IDはマッチしないようにしておく…
         0x44, 0x55, 0x4d, 0x4d, 0x59, 0x20, // $fc0024 ID "DUMMY "
         0x70, 0xff,                         // $fc002a "moveq #-1, d0"	(SCSI
-                    // IOCSコールエントリポイント)
-        0x4e, 0x75, // $fc002c "rts"
+                                            // IOCSコールエントリポイント)
+        0x4e, 0x75,                         // $fc002c "rts"
     };
 
 #if 0
@@ -365,7 +365,7 @@ void WinX68k_Exec(void) {
     do {
         int m, n = (ICount > CLOCK_SLICE) ? CLOCK_SLICE : ICount;
         //		C68K.ICount = m68000_ICountBk = 0; //
-        //割り込み発生前に与えておかないとダメ（CARAT）
+        // 割り込み発生前に与えておかないとダメ（CARAT）
 
         if (hsync) {
             hsync = 0;
@@ -957,7 +957,7 @@ int main(int argc, char* argv[])
                         Config.FrameRatePrev = Config.FrameRate;
                         Config.FrameRate = 32;
                     } else {
-                        Config.FrameRatePrev = Config.FrameRate;
+                        Config.FrameRate = Config.FrameRatePrev;
                     }
                     p6logd("* nowait: %d\n", Config.NoWaitMode);
                 }
@@ -1082,7 +1082,7 @@ int main(int argc, char* argv[])
 #endif
     }
 end_loop:
-    Memory_WriteB(0xe8e00d, 0x31); // SRAM書き込み許可
+    Memory_WriteB(0xe8e00d, 0x31);                       // SRAM書き込み許可
     Memory_WriteD(0xed0040, Memory_ReadD(0xed0040) + 1); // 積算稼働時間(min.)
     Memory_WriteD(0xed0044, Memory_ReadD(0xed0044) + 1); // 積算起動回数
 

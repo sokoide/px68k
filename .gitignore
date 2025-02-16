@@ -1,5 +1,6 @@
 *.o
 *~
+*.log
 px68k-android/assets
 px68k-android/bin
 px68k-android/gen
