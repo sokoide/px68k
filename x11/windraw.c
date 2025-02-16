@@ -671,9 +671,10 @@ void FASTCALL WinDraw_Draw(void) {
         //     rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 512.0 * 1.33333 / TextDotX,
         //                       512.0 / TextDotY, 0);
         roto_surface =
-            rotozoomSurfaceXY(sdl_rgbsurface, 0.0, 768.0 / TextDotX,
-                              512.0 / TextDotY, 0);
+            rotozoomSurfaceXY(sdl_rgbsurface, 0.0, WindowX / TextDotX,
+                              WindowY / TextDotY, 0);
     }
+
     if (roto_surface) {
         ret = SDL_BlitSurface(roto_surface, NULL, sdl_surface, NULL);
         SDL_FreeSurface(roto_surface);
