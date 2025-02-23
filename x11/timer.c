@@ -4,6 +4,7 @@
 #include "common.h"
 #include "crtc.h"
 #include "mfp.h"
+#include <unistd.h>
 
 DWORD	timercnt = 0;
 DWORD	tick = 0;
@@ -21,16 +22,37 @@ void Timer_Reset(void)
 WORD Timer_GetCount(void)
 {
 	DWORD ticknow = timeGetTime();
-	DWORD dif = ticknow-tick;
-	DWORD TIMEBASE = ((CRTC_Regs[0x29]&0x10)?VSYNC_HIGH:VSYNC_NORM);
+	DWORD dif = ticknow - tick;
+	DWORD TIMEBASE = ((CRTC_Regs[0x29] & 0x10) ? VSYNC_HIGH : VSYNC_NORM);
 
-	timercnt += dif*10000;
+	timercnt += dif * 10000;
 	tick = ticknow;
-	if ( timercnt>=TIMEBASE ) {
-//		timercnt = 0;
+	if (timercnt >= TIMEBASE) {
+		//		timercnt = 0;
 		timercnt -= TIMEBASE;
-		if ( timercnt>=(TIMEBASE*2) ) timercnt = 0;
+		if (timercnt >= (TIMEBASE * 2)) timercnt = 0;
 		return 1;
-	} else
+	}
+	else
 		return 0;
+}
+
+void Timer_WaitCount(void) {
+	while (1) {
+		// ticknow is nanosecond
+		DWORD ticknow = timeGetTime();
+		DWORD dif = ticknow - tick;
+		DWORD TIMEBASE = ((CRTC_Regs[0x29] & 0x10) ? VSYNC_HIGH : VSYNC_NORM);
+
+		timercnt += dif * 10000;
+		tick = ticknow;
+		if (timercnt >= TIMEBASE) {
+			timercnt -= TIMEBASE;
+			if (timercnt >= (TIMEBASE * 2)) timercnt = 0;
+			return;
+		}
+		else {
+			usleep((TIMEBASE-timercnt)/1000);
+		}
+	}
 }

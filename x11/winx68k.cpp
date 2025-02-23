@@ -50,10 +50,10 @@ extern "C" {
 #include "fmg_wrap.h"
 
 #ifdef RFMDRV
-int rfd_sock;
+    int rfd_sock;
 #endif
 
-// #define WIN68DEBUG
+    // #define WIN68DEBUG
 
 #ifdef WIN68DEBUG
 #include "d68k.h"
@@ -63,41 +63,41 @@ int rfd_sock;
 
 #define APPNAME "Keropi"
 
-extern WORD BG_CHREND;
-extern WORD BG_BGTOP;
-extern WORD BG_BGEND;
-extern BYTE BG_CHRSIZE;
+    extern WORD BG_CHREND;
+    extern WORD BG_BGTOP;
+    extern WORD BG_BGEND;
+    extern BYTE BG_CHRSIZE;
 
 #if defined(ANDROID) || TARGET_OS_IPHONE
-extern SDL_TouchID touchId;
+    extern SDL_TouchID touchId;
 #endif
 
-const BYTE PrgName[] = "Keropi";
-const BYTE PrgTitle[] = APPNAME;
+    const BYTE PrgName[] = "Keropi";
+    const BYTE PrgTitle[] = APPNAME;
 
-char winx68k_dir[MAX_PATH];
-char winx68k_ini[MAX_PATH];
+    char winx68k_dir[MAX_PATH];
+    char winx68k_ini[MAX_PATH];
 
-WORD VLINE_TOTAL = 567;
-DWORD VLINE = 0;
-DWORD vline = 0;
+    WORD VLINE_TOTAL = 567;
+    DWORD VLINE = 0;
+    DWORD vline = 0;
 
-extern int SplashFlag;
+    extern int SplashFlag;
 
-BYTE DispFrame = 0;
-DWORD SoundSampleRate;
+    BYTE DispFrame = 0;
+    DWORD SoundSampleRate;
 
-unsigned int hTimerID = 0;
-DWORD TimerICount = 0;
-extern DWORD timertick;
-BYTE traceflag = 0;
+    unsigned int hTimerID = 0;
+    DWORD TimerICount = 0;
+    extern DWORD timertick;
+    BYTE traceflag = 0;
 
-BYTE ForceDebugMode = 0;
-DWORD skippedframes = 0;
+    BYTE ForceDebugMode = 0;
+    DWORD skippedframes = 0;
 
-static int ClkUsed = 0;
-static int FrameSkipCount = 0;
-static int FrameSkipQueue = 0;
+    static int ClkUsed = 0;
+    static int FrameSkipCount = 0;
+    static int FrameSkipQueue = 0;
 
 #ifdef __cplusplus
 };
@@ -113,40 +113,40 @@ void WinX68k_SCSICheck(void) {
         0x00, 0xfc, 0x00, 0x14, // $fc0000 SCSI起動用のエントリアドレス
         0x00, 0xfc, 0x00,
         0x16, // $fc0004
-              // IOCSベクタ設定のエントリアドレス(必ず"Human"の8バイト前)
-        0x00, 0x00, 0x00, 0x00, // $fc0008 ?
-        0x48, 0x75, 0x6d, 0x61, // $fc000c ↓
-        0x6e, 0x36, 0x38,
-        0x6b,       // $fc0010 ID "Human68k"	(必ず起動エントリポイントの直前)
-        0x4e, 0x75, // $fc0014 "rts"		(起動エントリポイント)
-        0x23, 0xfc, 0x00, 0xfc, 0x00,
-        0x2a, // $fc0016 ↓		(IOCSベクタ設定エントリポイント)
-        0x00, 0x00, 0x07, 0xd4, // $fc001c "move.l #$fc002a, $7d4.l"
-        0x74, 0xff,             // $fc0020 "moveq #-1, d2"
-        0x4e, 0x75,             // $fc0022 "rts"
-        //		0x53, 0x43, 0x53, 0x49, 0x49, 0x4e,	// $fc0024 ID
-        //"SCSIIN"
-        // 内蔵SCSIをONにすると、SASIは自動的にOFFになっちゃうらしい…
-        // よって、IDはマッチしないようにしておく…
-        0x44, 0x55, 0x4d, 0x4d, 0x59, 0x20, // $fc0024 ID "DUMMY "
-        0x70, 0xff,                         // $fc002a "moveq #-1, d0"	(SCSI
-                                            // IOCSコールエントリポイント)
-        0x4e, 0x75,                         // $fc002c "rts"
+        // IOCSベクタ設定のエントリアドレス(必ず"Human"の8バイト前)
+  0x00, 0x00, 0x00, 0x00, // $fc0008 ?
+  0x48, 0x75, 0x6d, 0x61, // $fc000c ↓
+  0x6e, 0x36, 0x38,
+  0x6b,       // $fc0010 ID "Human68k"	(必ず起動エントリポイントの直前)
+  0x4e, 0x75, // $fc0014 "rts"		(起動エントリポイント)
+  0x23, 0xfc, 0x00, 0xfc, 0x00,
+  0x2a, // $fc0016 ↓		(IOCSベクタ設定エントリポイント)
+  0x00, 0x00, 0x07, 0xd4, // $fc001c "move.l #$fc002a, $7d4.l"
+  0x74, 0xff,             // $fc0020 "moveq #-1, d2"
+  0x4e, 0x75,             // $fc0022 "rts"
+  //		0x53, 0x43, 0x53, 0x49, 0x49, 0x4e,	// $fc0024 ID
+  //"SCSIIN"
+  // 内蔵SCSIをONにすると、SASIは自動的にOFFになっちゃうらしい…
+  // よって、IDはマッチしないようにしておく…
+  0x44, 0x55, 0x4d, 0x4d, 0x59, 0x20, // $fc0024 ID "DUMMY "
+  0x70, 0xff,                         // $fc002a "moveq #-1, d0"	(SCSI
+  // IOCSコールエントリポイント)
+0x4e, 0x75,                         // $fc002c "rts"
     };
 
 #if 0
-	DWORD *p;
+    DWORD* p;
 #endif
-    WORD *p1, *p2;
+    WORD* p1, * p2;
     int scsi;
     int i;
 
     scsi = 0;
     for (i = 0x30600; i < 0x30c00; i += 2) {
 #if 0 // 4の倍数ではない偶数アドレスからの4バイト長アクセスはMIPSには無理
-		p = (DWORD *)(&IPL[i]);
-		if (*p == 0x0000fc00)
-			scsi = 1;
+        p = (DWORD*)(&IPL[i]);
+        if (*p == 0x0000fc00)
+            scsi = 1;
 #else
         p1 = (WORD*)(&IPL[i]);
         p2 = p1 + 1;
@@ -163,17 +163,18 @@ void WinX68k_SCSICheck(void) {
         ZeroMemory(IPL, 0x2000);             // 本体は8kb
         memset(&IPL[0x2000], 0xff, 0x1e000); // 残りは0xff
         memcpy(IPL, SCSIIMG,
-               sizeof(SCSIIMG)); // インチキSCSI BIOS
-                                 //		Memory_SetSCSIMode();
-    } else {
+            sizeof(SCSIIMG)); // インチキSCSI BIOS
+        //		Memory_SetSCSIMode();
+    }
+    else {
         // SASIモデルはIPLがそのまま見える
         memcpy(IPL, &IPL[0x20000], 0x20000);
     }
 }
 
 int WinX68k_LoadROMs(void) {
-    static const char* BIOSFILE[] = {"iplrom.dat", "iplrom30.dat",
-                                     "iplromco.dat", "iplromxv.dat"};
+    static const char* BIOSFILE[] = { "iplrom.dat", "iplrom30.dat",
+                                     "iplromco.dat", "iplromxv.dat" };
     static const char FONTFILE[] = "cgrom.dat";
     static const char FONTFILETMP[] = "cgrom.tmp";
     FILEH fp;
@@ -211,9 +212,9 @@ int WinX68k_LoadROMs(void) {
             return FALSE;
 #else
             MessageBox(hWndMain,
-                       "フォントROMイメージが見つかりません."
-                       "\nWindowsフォントから新規に作成します.",
-                       "けろぴーのメッセージ", MB_ICONWARNING | MB_OK);
+                "フォントROMイメージが見つかりません."
+                "\nWindowsフォントから新規に作成します.",
+                "けろぴーのメッセージ", MB_ICONWARNING | MB_OK);
             SSTP_SendMes(SSTPMES_MAKEFONT);
             make_cgromdat(FONT, FALSE, "ＭＳ ゴシック", "ＭＳ 明朝");
             // WinX68k_MakeFont();
@@ -244,10 +245,10 @@ int WinX68k_Reset(void) {
     //	C68k_Set_Reg(&C68K, C68K_PC,
     //(IPL[0x30005]<<24)|(IPL[0x30004]<<16)|(IPL[0x30007]<<8)|IPL[0x30006]);
     C68k_Set_AReg(&C68K, 7,
-                  (IPL[0x30001] << 24) | (IPL[0x30000] << 16) |
-                      (IPL[0x30003] << 8) | IPL[0x30002]);
+        (IPL[0x30001] << 24) | (IPL[0x30000] << 16) |
+        (IPL[0x30003] << 8) | IPL[0x30002]);
     C68k_Set_PC(&C68K, (IPL[0x30005] << 24) | (IPL[0x30004] << 16) |
-                           (IPL[0x30007] << 8) | IPL[0x30006]);
+        (IPL[0x30007] << 8) | IPL[0x30006]);
 
     Memory_Init();
     CRTC_Init();
@@ -297,7 +298,8 @@ int WinX68k_Init(void) {
     if (MEM && FONT && IPL) {
         m68000_init();
         return TRUE;
-    } else
+    }
+    else
         return FALSE;
 }
 
@@ -329,18 +331,21 @@ void WinX68k_Exec(void) {
 
     if (Config.FrameRate != 7) {
         DispFrame = (DispFrame + 1) % Config.FrameRate;
-    } else { // Auto Frame Skip
+    }
+    else { // Auto Frame Skip
         if (FrameSkipQueue) {
             if (FrameSkipCount > 15) {
                 FrameSkipCount = 0;
                 FrameSkipQueue++;
                 DispFrame = 0;
-            } else {
+            }
+            else {
                 FrameSkipCount++;
                 FrameSkipQueue--;
                 DispFrame = 1;
             }
-        } else {
+        }
+        else {
             FrameSkipCount = 0;
             DispFrame = 0;
         }
@@ -352,10 +357,12 @@ void WinX68k_Exec(void) {
     if (Config.XVIMode == 1) {
         clk_total = (clk_total * 16) / 10;
         clkdiv = 16;
-    } else if (Config.XVIMode == 2) {
+    }
+    else if (Config.XVIMode == 2) {
         clk_total = (clk_total * 24) / 10;
         clkdiv = 24;
-    } else {
+    }
+    else {
         clkdiv = 10;
     }
     ICount += clk_total;
@@ -380,11 +387,13 @@ void WinX68k_Exec(void) {
             if (MFP[MFP_AER] & 0x10) {
                 if (vline == CRTC_VSTART)
                     MFP_Int(9);
-            } else {
+            }
+            else {
                 if (CRTC_VEND >= VLINE_TOTAL) {
                     if ((long)vline == (CRTC_VEND - VLINE_TOTAL))
                         MFP_Int(9); // エキサイティングアワーとか（TOTAL<VEND）
-                } else {
+                }
+                else {
                     if ((long)vline == (VLINE_TOTAL - 1))
                         MFP_Int(9); // クレイジークライマーはコレでないとダメ？
                 }
@@ -417,21 +426,21 @@ void WinX68k_Exec(void) {
                 if (/*fdctrace&&*/ (oldpc != C68k_Get_Reg(&C68K, C68K_PC))) {
                     //					//tracing--;
                     fprintf(fp,
-                            "D0:%08X D1:%08X D2:%08X D3:%08X D4:%08X D5:%08X "
-                            "D6:%08X D7:%08X CR:%04X\n",
-                            C68K.D[0], C68K.D[1], C68K.D[2], C68K.D[3],
-                            C68K.D[4], C68K.D[5], C68K.D[6], C68K.D[7],
-                            0 /* xxx とりあえず0 C68K.ccr */);
+                        "D0:%08X D1:%08X D2:%08X D3:%08X D4:%08X D5:%08X "
+                        "D6:%08X D7:%08X CR:%04X\n",
+                        C68K.D[0], C68K.D[1], C68K.D[2], C68K.D[3],
+                        C68K.D[4], C68K.D[5], C68K.D[6], C68K.D[7],
+                        0 /* xxx とりあえず0 C68K.ccr */);
                     fprintf(fp,
-                            "A0:%08X A1:%08X A2:%08X A3:%08X A4:%08X A5:%08X "
-                            "A6:%08X A7:%08X SR:%04X\n",
-                            C68K.A[0], C68K.A[1], C68K.A[2], C68K.A[3],
-                            C68K.A[4], C68K.A[5], C68K.A[6], C68K.A[7],
-                            C68k_Get_Reg(&C68K, C68K_SR) >>
-                                8 /* regs.sr_high*/);
+                        "A0:%08X A1:%08X A2:%08X A3:%08X A4:%08X A5:%08X "
+                        "A6:%08X A7:%08X SR:%04X\n",
+                        C68K.A[0], C68K.A[1], C68K.A[2], C68K.A[3],
+                        C68K.A[4], C68K.A[5], C68K.A[6], C68K.A[7],
+                        C68k_Get_Reg(&C68K, C68K_SR) >>
+                        8 /* regs.sr_high*/);
                     fprintf(fp, "<%04X> (%08X ->) %08X : %s\n",
-                            Memory_ReadW(C68k_Get_Reg(&C68K, C68K_PC)), oldpc,
-                            C68k_Get_Reg(&C68K, C68K_PC), buf);
+                        Memory_ReadW(C68k_Get_Reg(&C68K, C68K_PC)), oldpc,
+                        C68k_Get_Reg(&C68K, C68K_PC), buf);
                 }
                 oldpc = C68k_Get_Reg(&C68K, C68K_PC);
                 //				C68K.ICount = 1;
@@ -441,7 +450,8 @@ void WinX68k_Exec(void) {
             fclose(fp);
             usedclk = clk_line = HSYNC_CLK;
             clk_count = clk_next;
-        } else
+        }
+        else
 #endif
         {
             //			C68K.ICount = n;
@@ -475,11 +485,13 @@ void WinX68k_Exec(void) {
                 if (CRTC_VStep == 1) { // HighReso 256dot（2度読み）
                     if (vline % 2)
                         WinDraw_DrawLine();
-                } else if (CRTC_VStep == 4) { // LowReso 512dot
+                }
+                else if (CRTC_VStep == 4) { // LowReso 512dot
                     WinDraw_DrawLine(); // 1走査線で2回描く（インターレース）
                     VLINE++;
                     WinDraw_DrawLine();
-                } else { // High 512dot / Low 256dot
+                }
+                else { // High 512dot / Low 256dot
                     WinDraw_DrawLine();
                 }
             }
@@ -514,7 +526,8 @@ void WinX68k_Exec(void) {
             CRTC_FastClr--;
             if (!CRTC_FastClr)
                 CRTC_Mode &= 0xfd;
-        } else { // FastClr開始
+        }
+        else { // FastClr開始
             if (CRTC_Regs[0x29] & 0x10)
                 CRTC_FastClr = 1;
             else
@@ -577,7 +590,7 @@ int SetupCallbacks(void) {
     int thid;
 
     thid = sceKernelCreateThread("update_thread", CallbackThread, 0x11, 0xFA0,
-                                 0, 0);
+        0, 0);
     if (thid >= 0) {
         sceKernelStartThread(thid, 0, 0);
     }
@@ -676,7 +689,8 @@ int main(int argc, char* argv[])
             return 1;
         }
 #ifndef NOSOUND
-    } else {
+    }
+    else {
         sdlaudio = 0;
     }
 #endif
@@ -685,7 +699,7 @@ int main(int argc, char* argv[])
     SDL_WM_SetCaption(APPNAME " SDL", NULL);
 #ifndef PSP
     if (SDL_SetVideoMode(FULLSCREEN_WIDTH, FULLSCREEN_HEIGHT, 16,
-                         SDL_SWSURFACE) == NULL) {
+        SDL_SWSURFACE) == NULL) {
 #else
     if (SDL_SetVideoMode(480, 272, 16, SDL_SWSURFACE) == NULL) {
 #endif
@@ -712,18 +726,18 @@ int main(int argc, char* argv[])
 #else
     // for Android: window sizeの指定は関係なくフルスクリーンになるみたい
     sdl_window = SDL_CreateWindow(APPNAME " SDL", 0, 0, FULLSCREEN_WIDTH,
-                                  FULLSCREEN_HEIGHT,
-                                  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+        FULLSCREEN_HEIGHT,
+        SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
 #endif
 #else
     sdl_window = SDL_CreateWindow(APPNAME " SDL", 0, 0, FULLSCREEN_WIDTH,
-                                  FULLSCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        FULLSCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 #endif
     if (sdl_window == NULL) {
         p6logd("sdl_window: %ld", sdl_window);
     }
     SDL_SetWindowSize(sdl_window, SCREEN_WIDTH * Config.Scale,
-                      SCREEN_HEIGHT * Config.Scale);
+        SCREEN_HEIGHT * Config.Scale);
 
     if (std::stoi(args["-f"])) {
         SDL_SetWindowFullscreen(sdl_window, SDL_WINDOW_FULLSCREEN);
@@ -791,7 +805,8 @@ int main(int argc, char* argv[])
 #ifndef NO_MERCURY
         Mcry_Init(SoundSampleRate, winx68k_dir);
 #endif
-    } else {
+    }
+    else {
         ADPCM_Init(100);
         OPM_Init(4000000 /*3579545*/, 100);
 #ifndef NO_MERCURY
@@ -829,8 +844,11 @@ int main(int argc, char* argv[])
     // SDL_StartTextInput();
 
     while (1) {
+        if (!Config.NoWaitMode) {
+            Timer_WaitCount();
+        }
         // OPM_RomeoOut(Config.BufferSize * 5);
-        if (menu_mode == menu_out && (Config.NoWaitMode || Timer_GetCount())) {
+        if (menu_mode == menu_out) {
             WinX68k_Exec();
 #if defined(ANDROID) || TARGET_OS_IPHONE
             if (vk_cnt > 0) {
@@ -851,7 +869,7 @@ int main(int argc, char* argv[])
                 if (SplashFlag == 0)
                     WinDraw_HideSplash();
             }
-        }
+            }
 #ifndef PSP
         menu_key_down = SDLK_UNKNOWN;
 
@@ -861,8 +879,8 @@ int main(int argc, char* argv[])
                 goto end_loop;
             case SDL_MOUSEBUTTONDOWN:
                 p6logd("mouse down: x:%d y:%d button:%d clicks:%d\n",
-                       ev.button.x, ev.button.y, ev.button.button,
-                       ev.button.clicks);
+                    ev.button.x, ev.button.y, ev.button.button,
+                    ev.button.clicks);
                 if (ev.button.button == 1)
                     Mouse_Event(1, 1, 0);
                 else if (ev.button.button == 3)
@@ -870,7 +888,7 @@ int main(int argc, char* argv[])
                 break;
             case SDL_MOUSEBUTTONUP:
                 p6logd("mouse up: x:%d y:%d button:%d clicks:%d\n", ev.button.x,
-                       ev.button.y, ev.button.button, ev.button.clicks);
+                    ev.button.y, ev.button.button, ev.button.clicks);
                 if (ev.button.button == 1)
                     Mouse_Event(1, 0, 0);
                 else if (ev.button.button == 3)
@@ -878,7 +896,7 @@ int main(int argc, char* argv[])
                 break;
             case SDL_MOUSEMOTION:
                 p6logd("mouse motion: x:%d y:%d xrel:%d yrel:%d\n", ev.motion.x,
-                       ev.motion.y, ev.motion.xrel, ev.motion.yrel);
+                    ev.motion.y, ev.motion.xrel, ev.motion.yrel);
                 Mouse_Event(0, ev.motion.xrel, ev.motion.yrel);
                 break;
 #if defined(ANDROID) || TARGET_OS_IPHONE
@@ -898,7 +916,7 @@ int main(int argc, char* argv[])
             case SDL_FINGERMOTION:
                 float kx, ky, dx, dy;
                 p6logd("FM: x:%f y:%f dx:%f dy:%f\n", ev.tfinger.x,
-                       ev.tfinger.y, ev.tfinger.dx, ev.tfinger.dy);
+                    ev.tfinger.y, ev.tfinger.dx, ev.tfinger.dy);
                 if (vk_cnt == 0) {
                     kx = ev.tfinger.x * 800;
                     ky = ev.tfinger.y * 600;
@@ -918,10 +936,11 @@ int main(int argc, char* argv[])
                         if (kbd_y > 550)
                             kbd_y = 550;
                     }
-                } else if (Config.JoyOrMouse) { // Mouse mode is off when the
-                                                // keyboard is active
+                }
+                else if (Config.JoyOrMouse) { // Mouse mode is off when the
+                    // keyboard is active
                     Mouse_Event(0, ev.tfinger.dx * 50 * Config.MouseSpeed,
-                                ev.tfinger.dy * 50 * Config.MouseSpeed);
+                        ev.tfinger.dy * 50 * Config.MouseSpeed);
                 }
                 break;
 #endif
@@ -941,7 +960,8 @@ int main(int argc, char* argv[])
                     if (menu_mode == menu_out) {
                         menu_mode = menu_enter;
                         DSound_Stop();
-                    } else {
+                    }
+                    else {
                         DSound_Play();
                         menu_mode = menu_out;
                     }
@@ -949,22 +969,25 @@ int main(int argc, char* argv[])
                 }
 #endif
                 p6logd("keydown: 0x%x, font: %d %d\n", ev.key.keysym.sym,
-                       FONT[100], FONT[101]);
+                    FONT[100], FONT[101]);
                 if (ev.key.keysym.sym == SDLK_F12) {
                     if (menu_mode == menu_out) {
                         menu_mode = menu_enter;
                         DSound_Stop();
-                    } else {
+                    }
+                    else {
                         DSound_Play();
                         menu_mode = menu_out;
                     }
-                } else if (ev.key.keysym.sym == SDLK_LALT) {
+                }
+                else if (ev.key.keysym.sym == SDLK_LALT) {
                     // left Option (Apple) or Alt key
                     Config.NoWaitMode = !Config.NoWaitMode;
                     if (Config.NoWaitMode) {
                         Config.FrameRatePrev = Config.FrameRate;
                         Config.FrameRate = 32;
-                    } else {
+                    }
+                    else {
                         Config.FrameRate = Config.FrameRatePrev;
                     }
                     p6logd("* nowait: %d\n", Config.NoWaitMode);
@@ -977,7 +1000,8 @@ int main(int argc, char* argv[])
 #endif
                 if (menu_mode != menu_out) {
                     menu_key_down = ev.key.keysym.sym;
-                } else {
+                }
+                else {
                     Keyboard_KeyDown(ev.key.keysym.sym);
                 }
                 break;
@@ -985,8 +1009,8 @@ int main(int argc, char* argv[])
                 p6logd("keyup: 0x%x\n", ev.key.keysym.sym);
                 Keyboard_KeyUp(ev.key.keysym.sym);
                 break;
+                }
             }
-        }
 #endif // PSP
 
 #ifdef PSP
@@ -994,7 +1018,8 @@ int main(int argc, char* argv[])
             if (menu_mode == menu_out) {
                 menu_mode = menu_enter;
                 DSound_Stop();
-            } else {
+            }
+            else {
                 DSound_Play();
                 menu_mode = menu_out;
             }
@@ -1026,14 +1051,16 @@ int main(int argc, char* argv[])
                 DSound_Play();
                 menu_mode = menu_out;
             }
-        } else if (menu_mode == menu_out) {
+        }
+        else if (menu_mode == menu_out) {
             if (state == VBTN_OFF && menu_cnt == -2) {
                 menu_cnt = -1;
             }
             if (menu_cnt == -1 && state == VBTN_ON) {
                 p6logd("menu_cnt start");
                 menu_cnt = 20;
-            } else if (menu_cnt > 0 && state == VBTN_OFF) {
+            }
+            else if (menu_cnt > 0 && state == VBTN_OFF) {
                 menu_cnt = -1;
             }
             if (menu_cnt == 0) {
@@ -1057,7 +1084,8 @@ int main(int argc, char* argv[])
             if (ret == WUM_MENU_END) {
                 DSound_Play();
                 menu_mode = menu_out;
-            } else if (ret == WUM_EMU_QUIT) {
+            }
+            else if (ret == WUM_EMU_QUIT) {
                 goto end_loop;
             }
         }
@@ -1074,7 +1102,8 @@ int main(int argc, char* argv[])
             if (vk_cnt == -1 && state == VBTN_ON) {
                 p6logd("vk_cnt start");
                 vk_cnt = 20;
-            } else if (vk_cnt > 0 && state == VBTN_OFF) {
+            }
+            else if (vk_cnt > 0 && state == VBTN_OFF) {
                 vk_cnt = -1;
             }
             if (kbd_x > 700 && vk_cnt == 0) {
@@ -1088,7 +1117,7 @@ int main(int argc, char* argv[])
             }
         }
 #endif
-    }
+        }
 end_loop:
     Memory_WriteB(0xe8e00d, 0x31);                       // SRAM書き込み許可
     Memory_WriteD(0xed0040, Memory_ReadD(0xed0040) + 1); // 積算稼働時間(min.)
@@ -1118,4 +1147,4 @@ end_loop:
     exit(0);
 #endif
     return 0;
-}
+        }
