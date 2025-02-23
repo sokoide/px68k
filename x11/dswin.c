@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2003 NONAKA Kimihiro
  * All rights reserved.
  *
@@ -33,19 +33,20 @@
 
 short	playing = FALSE;
 
-#define PCMBUF_SIZE 2*2*48000
+// #define PCMBUF_SIZE 2*2*48000
+#define PCMBUF_SIZE 48000
 BYTE pcmbuffer[PCMBUF_SIZE];
-BYTE *pcmbufp = pcmbuffer;
-BYTE *pbsp = pcmbuffer;
-BYTE *pbrp = pcmbuffer, *pbwp = pcmbuffer;
-BYTE *pbep = &pcmbuffer[PCMBUF_SIZE];
+BYTE* pcmbufp = pcmbuffer;
+BYTE* pbsp = pcmbuffer;
+BYTE* pbrp = pcmbuffer, * pbwp = pcmbuffer;
+BYTE* pbep = &pcmbuffer[PCMBUF_SIZE];
 DWORD ratebase = 22050;
 long DSound_PreCounter = 0;
 BYTE sdlsndbuf[PCMBUF_SIZE];
 
 int audio_fd = -1;
 
-static void sdlaudio_callback(void *userdata, unsigned char *stream, int len);
+static void sdlaudio_callback(void* userdata, unsigned char* stream, int len);
 
 #ifndef NOSOUND
 #include	"SDL.h"
@@ -135,8 +136,8 @@ static void sound_send(int length)
 	rate = 0;
 #endif
 	SDL_LockAudio();
-	ADPCM_Update((short *)pbwp, length, rate, pbsp, pbep);
-	OPM_Update((short *)pbwp, length, rate, pbsp, pbep);
+	ADPCM_Update((short*)pbwp, length, rate, pbsp, pbep);
+	OPM_Update((short*)pbwp, length, rate, pbsp, pbep);
 #ifndef	NO_MERCURY
 	//Mcry_Update((short *)pcmbufp, length);
 #endif
@@ -185,10 +186,10 @@ static void FASTCALL DSound_Send(int length)
 }
 
 static void
-sdlaudio_callback(void *userdata, unsigned char *stream, int len)
+sdlaudio_callback(void* userdata, unsigned char* stream, int len)
 {
 	int lena, lenb, datalen, rate;
-	BYTE *buf;
+	BYTE* buf;
 	static DWORD bef;
 	DWORD now;
 
@@ -234,7 +235,8 @@ cb_start:
 		pbrp += len;
 		//printf("TYPEA: ");
 
-	} else {
+	}
+	else {
 		// pcmbuffer
 		// +---------+-------------+----------+
 		// |/////////|             |//////////|
@@ -249,7 +251,8 @@ cb_start:
 			buf = pbrp;
 			pbrp += len;
 			//printf("TYPEC: ");
-		} else {
+		}
+		else {
 			lenb = len - lena;
 			if (pbwp - pbsp < lenb) {
 #ifdef PSP
@@ -271,7 +274,7 @@ cb_start:
 		}
 	}
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)	
+#if SDL_VERSION_ATLEAST(2, 0, 0)
 	// SDL2.0ではstream bufferのクリアが必要
 	memset(stream, 0, len);
 #endif
