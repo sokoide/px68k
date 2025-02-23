@@ -20,7 +20,7 @@
 
 char joyname[2][MAX_PATH];
 char joybtnname[2][MAX_BUTTON][MAX_PATH];
-BYTE joybtnnum[2] = {0, 0};
+BYTE joybtnnum[2] = { 0, 0 };
 
 BYTE joy[2];
 BYTE JoyKeyState;
@@ -92,9 +92,9 @@ VBTN_POINTS vbtn_points[] = {
 #define VKEY_DRX(scale) (VKEY_R_X * (scale) - VKEY_R_X)
 #define VKEY_DKX(scale) (VKEY_K_X * (scale) - VKEY_K_X)
 
-VBTN_POINTS scaled_vbtn_points[sizeof(vbtn_points)/sizeof(VBTN_POINTS)];
+VBTN_POINTS scaled_vbtn_points[sizeof(vbtn_points) / sizeof(VBTN_POINTS)];
 
-VBTN_POINTS *Joystick_get_btn_points(float scale)
+VBTN_POINTS* Joystick_get_btn_points(float scale)
 {
 	int i;
 
@@ -131,7 +131,7 @@ VBTN_POINTS *Joystick_get_btn_points(float scale)
 void Joystick_Vbtn_Update(float scale)
 {
 	int i;
-	VBTN_POINTS *p;
+	VBTN_POINTS* p;
 
 	p = Joystick_get_btn_points(scale);
 
@@ -151,7 +151,8 @@ BYTE Joystick_get_vbtn_state(WORD n)
 #endif
 
 #ifndef PSP
-SDL_Joystick *sdl_joy;
+SDL_Joystick* sdl_joy;
+SDL_GameController* sdl_gamecontroller;
 #endif
 
 void Joystick_Init(void)
@@ -178,36 +179,54 @@ void Joystick_Init(void)
 
 #ifndef PSP
 	sdl_joy = 0;
+	sdl_gamecontroller = 0;
 
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 
 	nr_joys = SDL_NumJoysticks();
 	p6logd("joy num %d\n", nr_joys);
 	for (i = 0; i < nr_joys; i++) {
-		sdl_joy = SDL_JoystickOpen(i);
-		if (sdl_joy) {
-			nr_btns = SDL_JoystickNumButtons(sdl_joy);
-			nr_axes = SDL_JoystickNumAxes(sdl_joy);
-			nr_hats = SDL_JoystickNumHats(sdl_joy);
-
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-			p6logd("Name: %s\n", SDL_JoystickNameForIndex(i));
-#endif
-			p6logd("# of Axes: %d\n", nr_axes);
-			p6logd("# of Btns: %d\n", nr_btns);
-			p6logd("# of Hats: %d\n", nr_hats);
-
-			// skip accelerometer and keyboard
-			if (nr_btns < 2 || (nr_axes < 2 && nr_hats == 0)) {
-				Joystick_Cleanup();
-				sdl_joy = 0;
-			} else {
-				break;
-			}
-		} else {
-			p6logd("can't open joy %d\n", i);
+		sdl_gamecontroller = SDL_GameControllerOpen(i);
+		if (!sdl_gamecontroller) {
+			printf("Failed to open GameController(%d): %s\n", i, SDL_GetError());
+		}
+		else {
+			printf("Opened GameController(%d): %s\n", i, SDL_GameControllerName(sdl_gamecontroller));
+			int nr_axes = SDL_GameControllerGetAxis(sdl_gamecontroller, SDL_CONTROLLER_AXIS_LEFTX);
+			break;
 		}
 	}
+
+		// sdl_joy = SDL_JoystickOpen(i);
+
+		// printf("SDL_JoystickOpen(%d) = %p\n", i, sdl_joy);
+		// int num_hats = SDL_JoystickNumHats(sdl_joy);
+		// printf("Number of hats: %d\n", num_hats);
+
+// 		if (sdl_joy) {
+// 			nr_btns = SDL_JoystickNumButtons(sdl_joy);
+// 			nr_axes = SDL_JoystickNumAxes(sdl_joy);
+// 			nr_hats = SDL_JoystickNumHats(sdl_joy);
+
+// #if SDL_VERSION_ATLEAST(2, 0, 0)
+// 			p6logd("Name: %s\n", SDL_JoystickNameForIndex(i));
+// #endif
+// 			p6logd("# of Axes: %d\n", nr_axes);
+// 			p6logd("# of Btns: %d\n", nr_btns);
+// 			p6logd("# of Hats: %d\n", nr_hats);
+
+// 			// skip accelerometer and keyboard
+// 			if (nr_btns < 2 || (nr_axes < 2 && nr_hats == 0)) {
+// 				Joystick_Cleanup();
+// 				sdl_joy = 0;
+// 			} else {
+// 				break;
+// 			}
+	// }
+ 	// else {
+	//  p6logd("can't open joy %d\n", i);
+	// 	}
+	// }
 #endif
 }
 
@@ -219,7 +238,8 @@ void Joystick_Cleanup(void)
 		SDL_JoystickClose(sdl_joy);
 	}
 #else
-	SDL_JoystickClose(sdl_joy);
+	// SDL_JoystickClose(sdl_joy);
+	SDL_GameControllerClose(sdl_gamecontroller);
 #endif
 #endif
 }
@@ -237,13 +257,13 @@ BYTE FASTCALL Joystick_Read(BYTE num)
 
 	if (Config.JoyKey)
 	{
-		if ((Config.JoyKeyJoy2)&&(num==1))
+		if ((Config.JoyKeyJoy2) && (num == 1))
 			ret0 ^= JoyKeyState;
-		else if ((!Config.JoyKeyJoy2)&&(num==0))
+		else if ((!Config.JoyKeyJoy2) && (num == 0))
 			ret0 ^= JoyKeyState;
 	}
 
-	ret = ((~JoyPortData[num])&ret0)|(JoyPortData[num]&ret1);
+	ret = ((~JoyPortData[num]) & ret0) | (JoyPortData[num] & ret1);
 
 	return ret;
 }
@@ -251,7 +271,7 @@ BYTE FASTCALL Joystick_Read(BYTE num)
 
 void FASTCALL Joystick_Write(BYTE num, BYTE data)
 {
-	if ( (num==0)||(num==1) ) JoyPortData[num] = data;
+	if ((num == 0) || (num == 1)) JoyPortData[num] = data;
 }
 
 #ifdef PSP
@@ -290,7 +310,8 @@ void FASTCALL Joystick_Update(int is_menu, SDL_Keycode key)
 		if (psppad.Buttons & PSP_CTRL_CROSS) {
 			ret0 ^= JOY_TRG2;
 		}
-	} else {
+	}
+	else {
 		if (psppad.Buttons & PSP_CTRL_CIRCLE) {
 			mret0 ^= JOY_TRG1;
 		}
@@ -322,7 +343,7 @@ void FASTCALL Joystick_Update(int is_menu, SDL_Keycode key)
 	signed int x, y;
 	UINT8 hat;
 #if defined(ANDROID) || TARGET_OS_IPHONE
-	SDL_Finger *finger;
+	SDL_Finger* finger;
 	SDL_FingerID fid;
 	float fx, fy;
 	int i, j;
@@ -387,17 +408,18 @@ void FASTCALL Joystick_Update(int is_menu, SDL_Keycode key)
 			ret0 ^= JOY_DOWN;
 		}
 		if (vbtn_state[4] == VBTN_ON) {
-			ret0 ^= (Config.VbtnSwap == 0)? JOY_TRG1 : JOY_TRG2;
+			ret0 ^= (Config.VbtnSwap == 0) ? JOY_TRG1 : JOY_TRG2;
 		}
 		if (vbtn_state[5] == VBTN_ON) {
-			ret0 ^= (Config.VbtnSwap == 0)? JOY_TRG2 : JOY_TRG1;
+			ret0 ^= (Config.VbtnSwap == 0) ? JOY_TRG2 : JOY_TRG1;
 		}
-	} else if (Config.JoyOrMouse) {
+	}
+	else if (Config.JoyOrMouse) {
 		if (vbtn_state[4] == VBTN_ON) {
-			mret0 ^= (Config.VbtnSwap == 0)? JOY_TRG1 : JOY_TRG2;
+			mret0 ^= (Config.VbtnSwap == 0) ? JOY_TRG1 : JOY_TRG2;
 		}
 		if (vbtn_state[5] == VBTN_ON) {
-			mret0 ^= (Config.VbtnSwap == 0)? JOY_TRG2 : JOY_TRG1;
+			mret0 ^= (Config.VbtnSwap == 0) ? JOY_TRG2 : JOY_TRG1;
 		}
 	}
 
@@ -406,10 +428,12 @@ skip_vpad:
 #endif //defined(ANDROID) || TARGET_OS_IPHONE
 
 	// Hardware Joystick
-	if (sdl_joy) {
-		SDL_JoystickUpdate();
-		x = SDL_JoystickGetAxis(sdl_joy, Config.HwJoyAxis[0]);
-		y = SDL_JoystickGetAxis(sdl_joy, Config.HwJoyAxis[1]);
+	if (sdl_gamecontroller) {
+		SDL_GameControllerUpdate();
+
+		// Analog Stick
+		x = SDL_GameControllerGetAxis(sdl_gamecontroller, SDL_CONTROLLER_AXIS_LEFTX);
+		y = SDL_GameControllerGetAxis(sdl_gamecontroller, SDL_CONTROLLER_AXIS_LEFTY);
 
 		if (x < -JOYAXISPLAY) {
 			ret0 ^= JOY_LEFT;
@@ -424,55 +448,43 @@ skip_vpad:
 			ret0 ^= JOY_DOWN;
 		}
 
-		hat = SDL_JoystickGetHat(sdl_joy, Config.HwJoyHat);
-
-		if (hat) {
-			switch (hat) {
-			case SDL_HAT_RIGHTUP:
-				ret0 ^= JOY_RIGHT;
-			case SDL_HAT_UP:
-				ret0 ^= JOY_UP;
-				break;
-			case SDL_HAT_RIGHTDOWN:
-				ret0 ^= JOY_DOWN;
-			case SDL_HAT_RIGHT:
-				ret0 ^= JOY_RIGHT;
-				break;
-			case SDL_HAT_LEFTUP:
-				ret0 ^= JOY_UP;
-			case SDL_HAT_LEFT:
-				ret0 ^= JOY_LEFT;
-				break;
-			case SDL_HAT_LEFTDOWN:
-				ret0 ^= JOY_LEFT;
-			case SDL_HAT_DOWN:
-				ret0 ^= JOY_DOWN;
-				break;
-			}
+		// D-pad Buttons
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, SDL_CONTROLLER_BUTTON_DPAD_UP)) {
+			ret0 ^= JOY_UP;
+		}
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, SDL_CONTROLLER_BUTTON_DPAD_DOWN)) {
+			ret0 ^= JOY_DOWN;
+		}
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
+			ret0 ^= JOY_LEFT;
+		}
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
+			ret0 ^= JOY_RIGHT;
 		}
 
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[0])) {
+		// Trigger Buttons
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[0])) {
 			ret0 ^= JOY_TRG1;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[1])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[1])) {
 			ret0 ^= JOY_TRG2;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[2])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[2])) {
 			ret1 ^= JOY_TRG3;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[3])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[3])) {
 			ret1 ^= JOY_TRG4;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[4])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[4])) {
 			ret1 ^= JOY_TRG5;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[5])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[5])) {
 			ret1 ^= JOY_TRG6;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[6])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[6])) {
 			ret1 ^= JOY_TRG7;
 		}
-		if (SDL_JoystickGetButton(sdl_joy, Config.HwJoyBtn[7])) {
+		if (SDL_GameControllerGetButton(sdl_gamecontroller, Config.HwJoyBtn[7])) {
 			ret1 ^= JOY_TRG8;
 		}
 	}
@@ -480,7 +492,7 @@ skip_vpad:
 	// scan keycode for menu UI
 	if (key != SDLK_UNKNOWN) {
 		switch (key) {
-		case SDLK_UP :
+		case SDLK_UP:
 			ret0 ^= JOY_UP;
 			break;
 		case SDLK_DOWN:
@@ -520,11 +532,11 @@ skip_vpad:
 	// update the states of the mouse buttons
 	if (!(MouseDownState0 & JOY_TRG1) | (MouseUpState0 & JOY_TRG1)) {
 		printf("mouse btn1 event\n");
-		Mouse_Event(1, (MouseUpState0 & JOY_TRG1)? 0 : 1.0, 0);
+		Mouse_Event(1, (MouseUpState0 & JOY_TRG1) ? 0 : 1.0, 0);
 	}
 	if (!(MouseDownState0 & JOY_TRG2) | (MouseUpState0 & JOY_TRG2)) {
 		printf("mouse btn2 event\n");
-		Mouse_Event(2, (MouseUpState0 & JOY_TRG2)? 0 : 1.0, 0);
+		Mouse_Event(2, (MouseUpState0 & JOY_TRG2) ? 0 : 1.0, 0);
 	}
 #ifdef PSP
 	mouse_update_psp(psppad);
@@ -554,18 +566,18 @@ void reset_joy_upstate(void)
 DWORD Joystick_get_downstate_psp(DWORD ctrl_bit)
 {
 	return (JoyDownStatePSP & ctrl_bit);
-}	  
+}
 void Joystick_reset_downstate_psp(DWORD ctrl_bit)
 {
 	JoyDownStatePSP ^= ctrl_bit;
-}	  
+}
 
 void Joystatic_reset_anapad_psp(void)
 {
 	JoyAnaPadX = JoyAnaPadY = 128;
 }
 
-void _get_anapad_sub(BYTE av, int *v, int max)
+void _get_anapad_sub(BYTE av, int* v, int max)
 {
 	// accelerate accroding to an angle of the stick
 	if (av > 255 / 2 + 32) {
@@ -606,7 +618,7 @@ static void mouse_update_psp(SceCtrlData psppad)
 
 	_get_anapad_sub(JoyAnaPadX, &x, 255);
 	_get_anapad_sub(JoyAnaPadY, &y, 255);
-	
+
 	x -= 128; //x,y:(-4..4)
 	y -= 128;
 
@@ -629,4 +641,3 @@ static void mouse_update_psp(SceCtrlData psppad)
 	}
 }
 #endif
-

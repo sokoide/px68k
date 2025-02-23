@@ -8,6 +8,7 @@
 #include <SDL_keycode.h>
 #endif
 #include <SDL_joystick.h>
+#include <SDL_gamecontroller.h>
 #endif
 
 #define	JOY_UP		0x01
