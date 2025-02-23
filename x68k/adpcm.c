@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------------------
 //  ADPCM.C - ADPCM (OKI MSM6258V)
-//    な〜んか、X68Sound.dllに比べてカシャカシャした音になるんだよなぁ……
+//    な~んか、X68Sound.dllに比べてカシャカシャした音になるんだよなぁ……
 //    DSoundのクセってのもあるけど、それだけじゃなさそうな気もする
 // ---------------------------------------------------------------------------------------
 
@@ -12,7 +12,9 @@
 #include "adpcm.h"
 #include "dmac.h"
 
-#define ADPCM_BufSize      96000
+// 96000 ... for 2 seconds
+// #define ADPCM_BufSize      96000
+#define ADPCM_BufSize      44100
 #define ADPCMMAX           2047
 #define ADPCMMIN          -2048
 #define FM_IPSCALE         256L
