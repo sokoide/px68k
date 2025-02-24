@@ -848,6 +848,7 @@ int main(int argc, char* argv[])
             Timer_WaitCount();
         }
         // OPM_RomeoOut(Config.BufferSize * 5);
+        // if (menu_mode == menu_out && (Config.NoWaitMode || Timer_GetCount())) {
         if (menu_mode == menu_out) {
             WinX68k_Exec();
 #if defined(ANDROID) || TARGET_OS_IPHONE
@@ -869,7 +870,7 @@ int main(int argc, char* argv[])
                 if (SplashFlag == 0)
                     WinDraw_HideSplash();
             }
-            }
+        }
 #ifndef PSP
         menu_key_down = SDLK_UNKNOWN;
 
@@ -1009,8 +1010,8 @@ int main(int argc, char* argv[])
                 p6logd("keyup: 0x%x\n", ev.key.keysym.sym);
                 Keyboard_KeyUp(ev.key.keysym.sym);
                 break;
-                }
             }
+        }
 #endif // PSP
 
 #ifdef PSP
@@ -1117,7 +1118,7 @@ int main(int argc, char* argv[])
             }
         }
 #endif
-        }
+    }
 end_loop:
     Memory_WriteB(0xe8e00d, 0x31);                       // SRAM½ñ¤­¹þ¤ßµö²Ä
     Memory_WriteD(0xed0040, Memory_ReadD(0xed0040) + 1); // ÀÑ»»²ÔÆ¯»þ´Ö(min.)
@@ -1147,4 +1148,4 @@ end_loop:
     exit(0);
 #endif
     return 0;
-        }
+}
